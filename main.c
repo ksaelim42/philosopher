@@ -2,59 +2,35 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int	check_format(char **av)
+void	break_mutex(t_doctor *doctor)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	while (av[i])
+	while (i < doctor->data.n_philo)
 	{
-		j = 0;
-		while (av[i][j])
-			if (!ft_isdigit(av[i][j++]))
-				return (1);
+		pthread_mutex_destroy(&doctor->fork[i]);
 		i++;
 	}
-	return (0);
+	pthread_mutex_destroy(&doctor->data.print);
 }
 
-int	check_arg(int ac, char **av)
+void	philo_clear(t_doctor *doctor)
 {
-	if (ac != 5 && ac != 6)
-		return (1);
-	if (check_format(av))
-		return (1);
-	return (0);
-}
-
-	if (ac != 5 && ac != 6)
-	{
-		printf(FRED"Error:	"NONE);
-		printf(FWHITE"Invalid argument(s)!\n"NONE);
-		printf(FYELLOW"Usage:"NONE);
-		printf(FWHITE"	./philo [num of philo] [time to die] [time to eat] [time to sleep] {option: num of meal}\n"NONE);
-		exit(0);
-	}
-}
-
-int	ft_init(t_doctor *doctor, int ac, char **av)
-{
-	if (get_input(&doctor.data, ac, av))
-		return (1);
+	break_mutex(doctor);
+	free(doctor->fork);
+	free(doctor->philo);
 }
 
 int main(int ac, char **av)
 {
 	t_doctor	doctor;
 
-	if (check_arg(ac, av))
-		return (ft_perror(ARG), 1);
-	if (ft_init(&doctor, ac, av))
-		return (1);
+	if (ac != 5 && ac != 6)
+		ft_perror(ARG);
 	get_input(&doctor.data, ac, av);
-	routine_set(&doctor);
-	philo_create(&doctor, &ft_routine);
-	//philo_clear();i
+	init_philo(&doctor);
+	create_thread(&doctor, &ft_routine);
+	philo_clear(&doctor);
 	return (0);
 }

@@ -1,6 +1,7 @@
 #include "philo.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include "color.h"
 
 long	current_time(void)
 {
@@ -10,22 +11,22 @@ long	current_time(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));	
 }
 
-void	ft_alloc(t_doctor *doctor)
+void	alloc_philo_and_fork(t_doctor *doctor)
 {
 	doctor->philo = malloc(sizeof(t_philo) * doctor->data.n_philo);
 	if (!doctor->philo)
-		ft_perror("philo malloc failed\n");
+		ft_perror(PHILO_MALLOC);
 	doctor->fork = malloc(sizeof(pthread_mutex_t) * doctor->data.n_philo);
 	if (!doctor->fork)
-		ft_perror("fork malloc failed\n");
+		ft_perror(FORK_MALLOC);
 }
 
-void	routine_set(t_doctor *doctor)
+void	init_philo(t_doctor *doctor)
 {
 	int	i;
 
 	i = -1;
-	ft_alloc(doctor)
+	alloc_philo_and_fork(doctor);
 	while (++i < doctor->data.n_philo)
 	{
 		doctor->philo[i].name = i + 1;
@@ -35,28 +36,29 @@ void	routine_set(t_doctor *doctor)
 		doctor->philo[i].data = &doctor->data;
 		pthread_mutex_init(&doctor->fork[i], NULL);
 	}
+	pthread_mutex_init(&doctor->data.print, NULL);
 }
 
-void	philo_create(t_doctor *doctor, void *ft_routine)
+void	print_label(void)
 {
-    int			i;
-
-    i = 0;
-	//printf("\n         ");
 	printf("\n\t ");
 	printf(BGWHITE" Time "NONE);
 	printf("\t\t");
 	printf(BGWHITE" Philo \n\n"NONE);
-	//printf("      -----------------------------------------\n"NONE);
+}
+
+void	create_thread(t_doctor *doctor, void *ft_routine)
+{
+    int			i;
+
+    i = 0;
+	print_label();
 	doctor->data.t_start = current_time();
 	while (i < doctor->data.n_philo)
 		{
 			doctor->id = i;
 			if (pthread_create(&doctor->philo[i++].t, NULL, ft_routine, doctor))
-			{
-				printf("thread create fail\n");
-				exit(1);
-			}
+				ft_perror(THREAD_CREATE);
 			usleep (50);
 		}
     i = -1;
