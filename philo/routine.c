@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   routine.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/23 23:58:42 by ksaelim           #+#    #+#             */
+/*   Updated: 2023/05/24 00:28:56 by ksaelim          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 #include "stdio.h"
 #include "color.h"
@@ -15,10 +27,10 @@ static int	use_fork(t_philo *philo, pthread_mutex_t *fork, int mode)
 {
 	if (mode == TAKE)
 	{
-    	if (pthread_mutex_lock(&fork[philo->right]))
+		if (pthread_mutex_lock(&fork[philo->right]))
 			return (EXIT_FAILURE);
 		action_print(philo, FORK_R);
-    	if (pthread_mutex_lock(&fork[philo->left]))
+		if (pthread_mutex_lock(&fork[philo->left]))
 			return (EXIT_FAILURE);
 		action_print(philo, FORK_L);
 	}
@@ -40,14 +52,10 @@ int	time_use(t_philo *philo, int time_use)
 	while (!philo->data->philo_died && (current_time() - start_time < time_use))
 		usleep(1);
 	return (philo->data->philo_died);
-	// 	return (TRUE);
-	// return (FALSE);
 }
 
 static int	philo_eat(t_philo *philo, pthread_mutex_t *fork)
 {
-	// if (use_fork(philo, fork, TAKE))
-		// return(use_fork(philo, fork, DROP));
 	if (use_fork(philo, fork, TAKE))
 		return (1);
 	action_print(philo, EAT);
@@ -80,10 +88,9 @@ void	*ft_routine(void *arg)
 
 	doctor = (t_doctor *)arg;
 	id = doctor->id;
-	while (!doctor->data.philo_died && (doctor->philo[id].n_eated < doctor->data.n_meal || doctor->data.n_meal == -1))
+	while (!doctor->data.philo_died && (doctor->philo[id].n_eated \
+	< doctor->data.n_meal || doctor->data.n_meal == -1))
 	{
-		// if (check_died(&doctor->philo[id]))
-		// 	return (NULL);
 		if (philo_eat(&doctor->philo[id], doctor->fork))
 			break ;
 		if (check_died(&doctor->philo[id]))

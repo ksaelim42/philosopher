@@ -1,23 +1,23 @@
 NAME = philo
 
-SRC = input.c main.c philo.c print.c routine.c
+SRCS = input.c main.c philo.c print.c routine.c
 
 CC = cc
 
 CFLAGS = -Wall -Werror -Wextra -g -pthread
 
-OBJ = $(SRC:.c=.o)
+OBJS = $(SRCS:.c=.o)
 
-%o: %c 
-	@$(CC) $(CFLAG) -c $< -o $@ 
+%.o: %.c 
+	$(CC) $(CFLAG) -c $< -o $@ 
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(SRC) -o $(NAME)
+$(NAME): $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME)
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJS)
 
 fclean: clean
 	rm -f $(NAME)

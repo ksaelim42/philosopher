@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ksaelim <ksaelim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/23 23:58:00 by ksaelim           #+#    #+#             */
+/*   Updated: 2023/05/24 00:15:24 by ksaelim          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,7 +34,7 @@ void	philo_clear(t_doctor *doctor)
 	free(doctor->philo);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
 	t_doctor	doctor;
 
